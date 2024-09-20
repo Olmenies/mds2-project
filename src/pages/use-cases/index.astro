@@ -1,0 +1,34 @@
+---
+import UseCase from '../../components/UseCase.astro'
+import Layout from '../../layouts/Layout.astro'
+---
+
+<Layout title="Casos de uso">
+	<section class="flex h-full flex-col gap-4">
+		<div class="w-full overflow-hidden rounded-xl bg-blue-500 p-4 shadow-lg shadow-blue-900/50">
+			<h2 class="text-center text-4xl font-semibold">CU-001 - Registrar Alumno</h2>
+		</div>
+		<div class="flex gap-8">
+			<article class="w-full overflow-hidden rounded-xl bg-gray-700 shadow-lg shadow-blue-900/50">
+				<UseCase />
+			</article>
+			<article class="w-full overflow-hidden rounded-xl bg-gray-700 shadow-lg shadow-blue-900/50">
+				<div class="h-full">
+					<div class="flex justify-around p-4">
+						<button
+							class="rounded-lg border-2 border-blue-900 bg-blue-500 px-4 py-2 transition hover:scale-105 hover:bg-blue-700"
+						>
+							Modelo conceptual
+						</button>
+						<button
+							class="rounded-lg border-2 border-blue-900 bg-blue-500 px-4 py-2 transition hover:scale-105 hover:bg-blue-700"
+						>
+							Diagrama de secuencia
+						</button>
+					</div>
+					<div class="!h-full !w-full bg-red-200">@</div>
+				</div>
+			</article>
+		</div>
+	</section>
+</Layout>

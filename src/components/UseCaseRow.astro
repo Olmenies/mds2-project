@@ -1,0 +1,32 @@
+---
+import type { Step } from './UseCase.astro'
+
+interface Props {
+	title: string
+	className?: string
+	titleClassName?: string
+	contentClassName?: string
+	childFlow?: Step[] | undefined
+}
+
+const { title, className, childFlow, titleClassName, contentClassName } = Astro.props
+---
+
+<div class={`flex justify-between gap-0 border-b-2 border-blue-500 ${className}`}>
+	<div class={`flex items-center w-1/4 border-blue-500 font-semibold ${titleClassName}`}>
+		<h2 class="w-full text-start">{title}</h2>
+	</div>
+	<div
+		class={`flex w-full flex-col border-l-2 border-blue-500 justify-center p-2 text-start ${contentClassName}`}
+	>
+		<slot />
+		{
+			childFlow?.map((childStep, index) => (
+				<div class="flex items-center border-t-2 border-blue-500">
+					<h2 class="w-fit border-r-2 border-blue-500 px-4 py-2 font-semibold">E.{index + 1}</h2>
+					<span class="w-full px-2">{childStep.action}</span>
+				</div>
+			))
+		}
+	</div>
+</div>

@@ -1,0 +1,144 @@
+---
+import UseCaseRow from './UseCaseRow.astro'
+
+export interface Step {
+	actor: string
+	action: string
+	childFlow?: Step[]
+}
+
+export interface UseCase {
+	version: string
+	revisionDate: string
+	inspector: string
+	preconditions: string[]
+	description: string
+	mainFlow: Step[]
+	dependencies: string[]
+	postCondition: string
+	alternativeFlows: Step[]
+}
+
+const useCase: UseCase = {
+	version: '1',
+	revisionDate: '2024/09/14',
+	inspector: 'Nicolás Esteban Olmedo',
+	preconditions: ['N/A'],
+	description: 'lorem10',
+	mainFlow: [
+		{
+			actor: 'Alumno',
+			action: 'El alumno selecciona la opción de la plataforma para registrar al nuevo usuario'
+		},
+		{
+			actor: 'Sistema',
+			action:
+				'El sistema muestar una vista de bienvenida y pide nombre, apellido, fecha de nacimiento, correo electrónico y contraseña'
+		},
+		{
+			actor: 'Alumno',
+			action:
+				'El usuario proporiona nombre, apellido, fecha de nacimiento, correo electrónico y contraseña'
+		},
+		{
+			actor: 'Sistema',
+			action:
+				'El sistema verifica que no hay ningua cuenta creada con el correo electrónico provisto por el alumno, envía un correo electrónico con un código de verificación y muestra al alumno una vista pidiendo por el código recibido'
+		},
+		{
+			actor: 'Alumno',
+			action: 'El usuario proporciona el código de verificación recibido'
+		},
+		{
+			actor: 'Sistema',
+			action:
+				'El sistema verifica que el código proporcionado por el usuario coincide con el esperado y persiste el registro. Se le notifica al usuario que el registro fue finalizado mediante un a vista y un correo electrónico'
+		}
+	],
+	dependencies: ['RFN001', 'RFN002', 'RFN003'],
+	postCondition:
+		'El alumno tiene una cuenta mediante la cual puede loguearse en la plataforam y comprar',
+	alternativeFlows: [
+		{
+			actor: 'Alumno',
+			action: 'El alumno sube un PDF que no cumple con los requisitos no funcionales',
+			childFlow: [
+				{
+					actor: 'Sistema',
+					action:
+						'El sistema notifica al alumno que no puede procesar el PDF subide y que se debe reducir su tamaño'
+				}
+			]
+		}
+	]
+}
+---
+
+<section class="flex flex-col overflow-hidden rounded-xl border-2 border-blue-900 text-white">
+	<!-- Version row -->
+	<div class="flex border-b-2 border-blue-500">
+		<h3 class="w-fit border-r-2 border-r-blue-500 px-2 font-semibold">Versión</h3>
+		<span class="w-8 border-r-2 border-r-blue-500 px-2">{useCase.version}</span>
+		<h3 class="w-full border-r-2 border-r-blue-500 px-2 font-semibold">Fecha de revisión</h3>
+		<span class="w-64 border-r-2 border-r-blue-500 px-2">{useCase.revisionDate}</span>
+		<h3 class="w-32 border-r-2 border-r-blue-500 px-2 font-semibold">Revisor</h3>
+		<span class="w-full px-2">{useCase.inspector}</span>
+	</div>
+	<UseCaseRow title="Dependencias" titleClassName="min-w-fit">
+		<ul class="my-2 flex h-full w-full flex-col">
+			{useCase.dependencies?.map((dependency) => <li>{dependency}</li>)}
+		</ul>
+	</UseCaseRow>
+	<UseCaseRow title="Precondición" titleClassName="min-w-fit">
+		<ul class="mx-6 my-2 flex h-full w-full list-disc flex-col">
+			{useCase.preconditions.map((precondition) => <li>{precondition}</li>)}
+		</ul>
+	</UseCaseRow>
+	<UseCaseRow title="Descripción">
+		<span class="">{useCase.description}</span>
+	</UseCaseRow>
+	<!-- Main Flow row -->
+	<UseCaseRow title="Flujo principal" className="border-b-2" contentClassName="!p-0">
+		<UseCaseRow title="Paso" className="!border-x-0 font-bold">
+			<h2>Descripción</h2>
+		</UseCaseRow>
+		{
+			useCase.mainFlow.map((step, index) => (
+				<UseCaseRow
+					className={`!border-x-0 ${index === useCase.mainFlow.length - 1 && '!border-b-0'}`}
+					titleClassName="text-center justify-center "
+					contentClassName="!p-0"
+					title={(index + 1).toString()}
+					childFlow={step.childFlow}
+				>
+					<span class="my-2 w-full px-2">{step.action}</span>
+				</UseCaseRow>
+			))
+		}
+	</UseCaseRow>
+	<UseCaseRow title="Postcondición" className="">
+		<span>{useCase.postCondition}</span>
+	</UseCaseRow>
+	<!-- Alternative Flow row -->
+	<UseCaseRow title="Flujo principal" className="border-b-2" contentClassName="!p-0">
+		<UseCaseRow title="Paso" className="!border-x-0 font-bold">
+			<h2>Descripción</h2>
+		</UseCaseRow>
+		{
+			useCase.alternativeFlows.map((step, index) => (
+				<UseCaseRow
+					className={`!border-x-0 ${index === useCase.alternativeFlows.length - 1 && '!border-b-0'}`}
+					titleClassName="w-8 text-center justify-center"
+					contentClassName="!p-0"
+					title={(index + 1).toString()}
+					childFlow={step.childFlow}
+				>
+					<span class="my-2 w-full px-2">{step.action}</span>
+				</UseCaseRow>
+			))
+		}
+	</UseCaseRow>
+	<UseCaseRow title="Description" className="!border-b-0">
+		<span>aue</span>
+	</UseCaseRow>
+</section>
